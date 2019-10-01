@@ -5,13 +5,14 @@ import { Link } from 'react-router-dom';
 import api from '../../services/api';
 
 import Container from '../../components/Container';
-import { Form, SubmitButton, List } from './styles';
+import { Form, RepoInput, SubmitButton, List } from './styles';
 
 export default class Main extends Component {
 	state = {
 		newRepo: '',
 		repositories: [],
 		loading: false,
+		inputError: false,
 	};
 
 	// Criação deste componente
@@ -40,27 +41,50 @@ export default class Main extends Component {
 	};
 
 	handleSubmit = async e => {
-		e.preventDefault();
+		try {
+			e.preventDefault();
 
-		this.setState({ loading: true });
+			this.setState({
+				loading: true,
+				inputError: false,
+			});
 
-		const { newRepo, repositories } = this.state;
+			const { newRepo, repositories } = this.state;
 
-		const response = await api.get(`/repos/${newRepo}`);
+			if (
+				repositories.filter(
+					repository => repository.name.toUpperCase() === newRepo.toUpperCase()
+				).length > 0
+			) {
+				console.log('1');
+				throw new Error('Repositório duplicado');
+			} else {
+				console.log('2');
+			}
 
-		const data = {
-			name: response.data.full_name,
-		};
+			const response = await api.get(`/repos/${newRepo}`);
 
-		this.setState({
-			repositories: [...repositories, data],
-			newRepo: '',
-			loading: false,
-		});
+			const data = {
+				name: response.data.full_name,
+			};
+
+			this.setState({
+				repositories: [...repositories, data],
+				newRepo: '',
+				loading: false,
+			});
+		} catch (error) {
+			console.log(error);
+
+			this.setState({
+				inputError: true,
+				loading: false,
+			});
+		}
 	};
 
 	render() {
-		const { newRepo, repositories, loading } = this.state;
+		const { newRepo, repositories, loading, inputError } = this.state;
 
 		return (
 			<Container>
@@ -70,11 +94,10 @@ export default class Main extends Component {
 				</h1>
 
 				<Form onSubmit={this.handleSubmit}>
-					<input
-						type="text"
-						placeholder="Adicionar Repositórios"
+					<RepoInput
 						value={newRepo}
 						onChange={this.handleInputChange}
+						inputError={inputError ? 1 : undefined}
 					/>
 
 					<SubmitButton loading={loading ? 1 : undefined}>

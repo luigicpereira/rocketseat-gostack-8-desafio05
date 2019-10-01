@@ -4,14 +4,25 @@ export const Form = styled.form`
 	margin-top: 30px;
 	display: flex;
 	flex-direction: row;
+`;
 
-	input {
-		flex: 1;
-		border: 1px solid #ddd;
-		padding: 10px 15px;
-		border-radius: 4px;
-		font-size: 16px;
-	}
+export const RepoInput = styled.input.attrs(() => ({
+	type: 'text',
+	placeholder: 'Adicionar Repositórios',
+}))`
+	flex: 1;
+	padding: 10px 15px;
+	border-radius: 4px;
+	font-size: 16px;
+
+	${props =>
+		props.inputError
+			? css`
+					border: 1px solid #f00;
+			  `
+			: css`
+					border: 1px solid #ddd;
+			  `}
 `;
 
 const rotate = keyframes`

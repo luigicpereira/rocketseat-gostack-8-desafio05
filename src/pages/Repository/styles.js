@@ -47,9 +47,19 @@ export const IssueList = styled.ul`
 	margin-top: 30px;
 	border-top: 1px solid #ddd;
 	list-style: none;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-start;
+
+	select {
+		margin-bottom: 10px;
+	}
 
 	li {
 		display: flex;
+		flex: 1;
+		width: 100%;
 		padding: 15px 10px;
 		border: 1px solid #ddd;
 		border-radius: 4px;
@@ -68,6 +78,11 @@ export const IssueList = styled.ul`
 		div {
 			flex: 1;
 			margin-left: 15px;
+			margin-top: 0;
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			justify-content: center;
 
 			strong {
 				font-size: 16px;
@@ -97,6 +112,26 @@ export const IssueList = styled.ul`
 				margin-top: 5px;
 				font-size: 12px;
 				color: #999;
+			}
+		}
+	}
+
+	div {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		margin-top: 10px;
+
+		input[type='button'] {
+			border: none;
+			background: none;
+			margin: 0 15px;
+			cursor: pointer;
+
+			&[disabled] {
+				cursor: not-allowed;
+				opacity: 0.6;
 			}
 		}
 	}
